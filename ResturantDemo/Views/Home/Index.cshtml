@@ -12,20 +12,20 @@
 @if (User.Identity.IsAuthenticated)
 {
     <div>
-        <button onclick="ShowCreateForm()">Add a Category</button>
+        <button class="btn btn-primary" onclick="ShowCreateForm()">Add a Category</button>
         <div id="CreateForm"></div>
     </div>
 }
 
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-9">
         @foreach (var category in Model)
         {
             @Html.Partial("_MenuItemPartial", category)
         }
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         Resturant side bar
     </div>
 </div>
@@ -43,13 +43,53 @@
                 }
             })
         }
+        var ShowEditForm = function (categoryId) {
+        	$.ajax({
+        		url: "/home/Edit/?categoryId=" + categoryId,
+        		method: "GET",
+        		dataType: "html",
+        		success: function (partial) {
+        			$("#CreatePanelForm").html(partial);
+        		}
+        	})
+        }
+        var ShowDeleteForm = function (categoryId) {
+        	$.ajax({
+        		url: "/home/Delete/?categoryId=" + categoryId,
+        		method: "GET",
+        		dataType: "html",
+        		success: function (partial) {
+        			$("#CreatePanelForm").html(partial);
+        		}
+        	})
+        }
 		var ShowCreateItemForm = function (categoryId) {
 			$.ajax({
 				url: "/home/CreateItem/?categoryId=" + categoryId,
 				method: "GET",
 				dataType: "html",
 				success: function (partial) {
-					$("#CreateItemForm").html(partial);
+					$("#CreatePanelForm").html(partial);
+				}
+			})
+		}
+		var ShowEditItemForm = function (menuId) {
+			$.ajax({
+				url: "/home/EditItem/?menuId=" + menuId,
+				method: "GET",
+				dataType: "html",
+				success: function (partial) {
+					$("#CreateMenuForm").html(partial);
+				}
+			})
+		}
+		var ShowDeleteItemForm = function (menuId) {
+			$.ajax({
+				url: "/home/DeleteItem/?menuId=" + menuId,
+				method: "GET",
+				dataType: "html",
+				success: function (partial) {
+					$("#CreateMenuForm").html(partial);
 				}
 			})
 		}
