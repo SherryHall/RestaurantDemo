@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
 using ResturantDemo.Models;
 
 namespace ResturantDemo.Controllers
@@ -69,6 +70,34 @@ namespace ResturantDemo.Controllers
                 );
             return RedirectToAction("Index");
         }
+	
 
-    }
+		public ActionResult CreateItem(int categoryId)
+		{
+			var newItem = new MenuItem();
+			newItem.CategoryId = categoryId;
+			return PartialView(newItem);
+		}
+
+
+		[HttpPost]
+		public ActionResult CreateItem(MenuItem menuitem)
+		{
+			var db = new ApplicationDbContext();
+			HttpContext.Cache.Remove("menu");
+			db.MenuItems.Add(menuitem);
+			db.SaveChanges();
+			var menu = db.Categories.Include("Menu").OrderBy(o => o.Name).ToList();
+			HttpContext.Cache.Add(
+				"menu",
+				menu,
+				null,
+				System.Web.Caching.Cache.NoAbsoluteExpiration,
+				new TimeSpan(0, 5, 0),
+				System.Web.Caching.CacheItemPriority.Default,
+				null
+				);
+			return RedirectToAction("Index");
+		}
+	}
 }

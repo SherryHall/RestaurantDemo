@@ -12,7 +12,7 @@
 @if (User.Identity.IsAuthenticated)
 {
     <div>
-        <button onclick="ShowCreateForm()">Create Menu Section</button>
+        <button onclick="ShowCreateForm()">Add a Category</button>
         <div id="CreateForm"></div>
     </div>
 }
@@ -37,11 +37,21 @@
             $.ajax({
                 url: "/home/create",
                 method: "GET",
-                dataType:"html", 
+                dataType:"html",
                 success: function (partial) {
                     $("#CreateForm").html(partial);
                 }
             })
         }
+		var ShowCreateItemForm = function (categoryId) {
+			$.ajax({
+				url: "/home/CreateItem/?categoryId=" + categoryId,
+				method: "GET",
+				dataType: "html",
+				success: function (partial) {
+					$("#CreateItemForm").html(partial);
+				}
+			})
+		}
     </script>
 }
