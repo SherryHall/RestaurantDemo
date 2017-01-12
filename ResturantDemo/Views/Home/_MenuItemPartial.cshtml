@@ -4,11 +4,11 @@
 	<div class="panel-heading">
 		<div class="panel-title">
 			<h3 class="pull-left">@Model.Name</h3>
-			@if (User.Identity.IsAuthenticated)
+			@if (User.IsInRole("admin"))
 			{
-				<button class="btn btn-info" onclick="ShowEditForm(@Model.Id)">Edit Category</button>
-				<button class="btn btn-danger" onclick="ShowDeleteForm(@Model.Id)">Delete Category</button>
-				<button class="btn btn-primary pull-right" onclick="ShowCreateItemForm(@Model.Id)">Add an Item</button>
+				<button class="btn-xs btn-info" onclick="ShowEditForm(@Model.Id)">Edit Category</button>
+				<button class="btn-xs btn-danger" onclick="ShowDeleteForm(@Model.Id)">Delete Category</button>
+				<button class="btn-sm btn-primary pull-right" onclick="ShowCreateItemForm(@Model.Id)">Add an Item</button>
 				<div id="CreatePanelForm"></div>
 			}
 			<div class="clearfix"></div>
@@ -18,22 +18,24 @@
 		@foreach (var item in Model.Menu)
 			{
 			<div class="row">
-				@if (User.Identity.IsAuthenticated)
+				@if (User.IsInRole("admin"))
 				{
 					<div class="col-xs-2">
-					<button class="btn btn-link" onclick="ShowEditItemForm(@item.Id)">Edit</button>
-					<button class="btn btn-link" onclick="ShowDeleteItemForm(@item.Id)">Del</button>
+						<button class="btn-sm btn-link" onclick="ShowEditItemForm(@item.Id)">Edit</button>
+						<button class="btn-sm btn-link" onclick="ShowDeleteItemForm(@item.Id)">Del</button>
 					</div>
 					<div id="CreateMenuForm"></div>
+				}
+				else
+				{
+					<div class="col-xs-2">
+						<button class="btn-sm btn-warning" onclick="addToCart(@item.Id)">Order</button>
+					</div>
 				}
 				<div class="col-xs-3"> @item.Name </div>
 				<div class="col-xs-6"> @item.Description </div>
 				<div class="col-xs-1">@Html.DisplayFor(x => item.Price)</div>
 			</div>
-			}
+		}
 	</div>
 </div>
-@section scripts{
-
-
-}

@@ -5,11 +5,13 @@
 }
 
 <div class="jumbotron">
-    <h1>Restaurant</h1>
-    <p class="lead">Hey hey!<marquee>Come and eat our food!</marquee></p>
+    <h1>Super Delish Diner</h1>
+    <p class="lead"><marquee>Come and eat our food!</marquee></p>
 </div>
 
-@if (User.Identity.IsAuthenticated)
+
+
+@if (User.IsInRole("admin"))
 {
     <div>
         <button class="btn btn-primary" onclick="ShowCreateForm()">Add a Category</button>
@@ -26,7 +28,22 @@
         }
     </div>
     <div class="col-md-3">
-        Resturant side bar
+		<div id="shoppingCart">
+			@Html.Partial("_ShoppingCart", new ResturantDemo.Models.Order())
+		</div>
+        <hr />
+		<div>
+			Super Delish Dinner
+		</div>
+		<div>
+			21 Main St.
+		</div>
+		<div>
+			St. Petersburg, FL 33701
+		</div>
+		<div>
+			727-387-5783
+		</div>
     </div>
 </div>
 
@@ -93,5 +110,30 @@
 				}
 			})
 		}
+		var addToCart = function (itemId) {
+			$.ajax({
+				url: "/home/ShoppingCart/?menuId=" + itemId,
+				method: "POST",
+				dataType: "html",
+				success: function (partial) {
+					$("#shoppingCart").html(partial);
+				}
+			});
+		}
+
+		var getShoppingCart = function () {
+			$.ajax({
+				url: "/home/ShoppingCart",
+				method: "GET",
+				dataType: "html",
+				success: function (partial) {
+					$("#shoppingCart").html(partial);
+				}
+			});
+		}
+
+		$(document).ready(function () {
+			getShoppingCart();
+		});
     </script>
 }

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using ResturantDemo.Models;
 using System.Net;
 using System.Data.Entity;
+using Microsoft.AspNet.Identity;
 
 namespace ResturantDemo.Controllers
 {
@@ -216,6 +217,57 @@ namespace ResturantDemo.Controllers
 			db.SaveChanges();
 
 			return RedirectToAction("Index");
+		}
+
+		[HttpGet]
+		public ActionResult ShoppingCart()
+		{
+			var cart = HttpContext.Session["cart"] as Order;
+			return PartialView("_ShoppingCart", cart);
+		}
+
+		[HttpPost]
+		public ActionResult ShoppingCart(int menuId)
+		{
+			var cart = HttpContext.Session["cart"] as Order;
+			if (cart == null)
+			{
+				cart = new Order();
+			}
+			var db = new ApplicationDbContext();
+			var item = db.MenuItems.FirstOrDefault(f => f.Id == menuId);
+			cart.Items.Add(item);
+			if (HttpContext.Session["cart"] as Order == null)
+			{
+				HttpContext.Session.Add("cart", cart);
+			}
+			else
+			{
+				HttpContext.Session["cart"] = cart;
+			}
+			return PartialView("_ShoppingCart", cart);
+		}
+
+		public ActionResult ViewCart()
+		{
+			var cart = HttpContext.Session["cart"] as Order;
+			return View(cart);
+		}
+
+		[Authorize(Roles = "customer")]
+		public ActionResult PlaceOrder()
+		{
+			var cart = HttpContext.Session["cart"] as Order;
+			var db = new ApplicationDbContext();
+			if (cart != null)
+			{
+				cart.CustomerId = User.Identity.GetUserId();
+				db.Orders.Add(cart);
+				db.SaveChanges();
+				HttpContext.Session.Remove("cart");    // alternative - HttpContext.Session["cart"] = null;
+			}
+
+			return View();
 		}
 	}
 }

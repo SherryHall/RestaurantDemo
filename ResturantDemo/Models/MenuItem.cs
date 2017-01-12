@@ -9,7 +9,20 @@ namespace ResturantDemo.Models
 {
     public class MenuItem
     {
-        public int Id { get; set; }
+		public MenuItem()
+		{
+
+		}
+		public MenuItem(MenuItem s)
+		{
+			this.Id = s.Id;
+			this.Name = s.Name;
+			this.Description = s.Description;
+			this.Price = s.Price;
+			this.CategoryId = s.CategoryId;
+		}
+
+		public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 

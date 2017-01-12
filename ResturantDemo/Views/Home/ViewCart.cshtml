@@ -1,0 +1,39 @@
+﻿@model ResturantDemo.Models.Order
+@{
+	ViewBag.Title = "ViewCart";
+}
+<h2>Menu Items Selected</h2>
+<div>
+	<h4>Order</h4>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.OrderTime)
+		</dt>
+		<dd>
+			@Html.DisplayFor(model => model.OrderTime)
+		</dd>
+	</dl>
+	@if (Model.Items == null)
+	{
+		<div>You haven't ordered anything yet. @Html.ActionLink("Return to Menu to make selections", "Index")</div>
+	}
+	else
+	{
+		foreach (var item in Model.Items)
+		{
+			<div>@item.Name</div>
+
+			<div>@Html.DisplayFor(model => item.Price)</div>
+		}
+	}
+
+	<br />
+	<div>
+		@Html.DisplayFor(model => model.BalanceDue)
+	</div>
+</div>
+<p>
+	@Html.ActionLink("Place Order", "PlaceOrder") |
+	@Html.ActionLink("Return to Menu", "Index")
+</p>

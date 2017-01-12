@@ -1,0 +1,13 @@
+﻿@model ResturantDemo.Models.Order
+
+@if (Model == null || Model.Items.Count() == 0)
+{
+	<span>Your cart is currently empty</span>
+}
+else
+{
+	<span> Items Ordered: </span><span>@Model.Items.Count()</span><br />
+	<span> Balance Due: @Html.DisplayFor(modelItem => modelItem.BalanceDue)</span>
+	<br />
+	@Html.ActionLink("View Cart Contents", "ViewCart");
+}
